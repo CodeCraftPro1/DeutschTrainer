@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DeutschTrainer - Word Trainer Challenge</title>
+
+  <!-- SEO Meta Description -->
+  <meta name="description" content="DeutschTrainer - Interactive site to learn German language easily through vocabulary training. Lessons from A1 to B1 with fun exercises to improve your skills. More words will be added regularly." />
+
+  <!-- SEO Meta Keywords -->
+  <meta name="keywords" content="learn German, German vocabulary, German word training, Deutsch lernen, German language course, German lessons A1, German lessons A2, German lessons B1, vocabulary trainer German, beginner German, online German learning, DeutschTrainer, language learning, German practice, German words quiz" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display&display=swap');
+
+    body {
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      perspective: 1400px;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% {
+        text-shadow:
+          0 0 10px #9ca3af,
+          0 0 20px #6366f1,
+          0 0 30px #4f46e5,
+          0 0 40px #4338ca,
+          0 0 50px #4338ca;
+        color: #e0e7ff;
+      }
+      50% {
+        text-shadow:
+          0 0 20px #818cf8,
+          0 0 30px #6366f1,
+          0 0 40px #4f46e5,
+          0 0 50px #4338ca,
+          0 0 60px #4338ca;
+        color: #a5b4fc;
+      }
+    }
+
+    #site-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      animation: glowPulse 3s ease-in-out infinite;
+      user-select: none;
+      letter-spacing: 0.1em;
+    }
+
+    #iphone {
+      width: 360px;
+      height: 720px;
+      background: linear-gradient(145deg, rgba(255 255 255 / 0.10), rgba(255 255 255 / 0.04));
+      border-radius: 70px;
+      border: 3px solid rgba(255 255 255 / 0.25);
+      box-shadow:
+        0 30px 50px rgba(0,0,0,0.5),
+        inset 0 0 40px 15px rgba(255 255 255 / 0.3),
+        inset 0 -5px 20px rgba(255 255 255 / 0.15);
+      position: relative;
+      backdrop-filter: blur(30px);
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+
+      transform-style: preserve-3d;
+      transform: translateZ(0);
+      transition: box-shadow 0.3s ease;
+    }
+
+    #iphone:hover {
+      box-shadow:
+        0 45px 70px rgba(0,0,0,0.65),
+        inset 0 0 50px 20px rgba(255 255 255 / 0.4),
+        inset 0 -5px 30px rgba(255 255 255 / 0.2);
+    }
+
+    #screen {
+      flex: 1;
+      background: linear-gradient(180deg, rgba(0 0 0 / 0.3), rgba(0 0 0 / 0.5));
+      border-radius: 45px;
+      box-shadow:
+        inset 0 0 80px 20px rgba(255 255 255 / 0.18),
+        0 20px 30px rgba(0,0,0,0.75);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      transform-style: preserve-3d;
+      transform: translateZ(80px);
+      transition: background-color 0.6s ease;
+    }
+
+    #description {
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      color: #cfd6e4cc;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(255 255 255, 0.3);
+      transform: translateZ(90px);
+    }
+
+    #word-count {
+      text-align: center;
+      font-size: 1rem;
+      color: #cbd5e1cc;
+      margin-bottom: 12px;
+      text-shadow: 0 0 6px rgba(255 255 255, 0.25);
+      transform: translateZ(95px);
+    }
+
+    #english-word {
+      font-size: 2.8rem;
+      font-weight: 900;
+      text-align: center;
+      margin: 24px 0;
+      color: #fff;
+      text-shadow:
+        2px 2px 10px rgba(0,0,0,0.7),
+        0 0 25px #e0e7ffcc;
+      transform: translateZ(110px);
+    }
+
+    #options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transform-style: preserve-3d;
+      transform: translateZ(100px);
+    }
+
+    .option {
+      background: linear-gradient(145deg, rgba(255 255 255 / 0.15), rgba(255 255 255 / 0.05));
+      border-radius: 20px;
+      padding: 16px 0;
+      font-weight: 700;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow:
+        0 10px 30px rgba(0 0 0 / 0.5),
+        inset 0 2px 5px rgba(255 255 255 / 0.3);
+      transition:
+        background-color 0.4s ease,
+        box-shadow 0.4s ease,
+        transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      transform-style: preserve-3d;
+      transform: translateZ(15px);
+    }
+    .option:hover:not(.disabled) {
+      background: linear-gradient(145deg, rgba(255 255 255 / 0.3), rgba(255 255 255 / 0.1));
+      box-shadow:
+        0 18px 45px rgba(0 0 0 / 0.6),
+        inset 0 3px 7px rgba(255 255 255 / 0.5);
+      transform: translateZ(30px) scale(1.06);
+    }
+
+    .option.correct {
+      background-color: #22c55e !important;
+      box-shadow: 0 0 30px #22c55ecc !important, inset 0 0 25px #22c55eaa !important;
+      color: white;
+      cursor: default;
+      transform: translateZ(30px);
+    }
+
+    .option.wrong {
+      background-color: #ef4444 !important;
+      box-shadow: 0 0 30px #ef4444cc !important, inset 0 0 25px #ef4444aa !important;
+      color: white;
+      cursor: default;
+      transform: translateZ(30px);
+    }
+
+    .option.disabled {
+      pointer-events: none;
+    }
+
+    #emoji {
+      font-size: 3rem;
+      text-align: center;
+      margin-top: 28px;
+      height: 40px;
+      color: #fff;
+      text-shadow: 0 0 15px #fff9;
+      transform: translateZ(120px);
+    }
+
+    #screen.correct-flash {
+      background-color: rgba(34,197,94,0.35) !important;
+      transition: background-color 0.6s ease;
+    }
+
+    #screen.wrong-flash {
+      background-color: rgba(239,68,68,0.35) !important;
+      transition: background-color 0.6s ease;
+    }
+
+    @media (min-width: 720px) {
+      #iphone {
+        width: 400px;
+        height: 800px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-title" aria-label="Site Name">DeutschTrainer</div>
+
+<div id="iphone" tabindex="0" aria-label="Word Trainer Challenge 3D Phone">
+  <div id="screen">
+    <div id="description">
+      Select the correct German translation for the English word shown below.<br>
+      Try to get the highest score possible. Good luck! 🍀<br>
+      More words will be added regularly to enhance your learning experience.
+    </div>
+    <div id="word-count"></div>
+    <div id="english-word">Loading...</div>
+    <div id="options-container"></div>
+    <div id="emoji"></div>
+  </div>
+</div>
+
+<audio id="correct-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7c7cfa6797.mp3" preload="auto"></audio>
+<audio id="wrong-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c3730f0173.mp3" preload="auto"></audio>
+
+<script>
+  const words = [
+    { english: "House", german: "Haus" },
+    { english: "Book", german: "Buch" },
+    { english: "Car", german: "Auto" },
+    { english: "Dog", german: "Hund" },
+    { english: "School", german: "Schule" },
+    { english: "Water", german: "Wasser" },
+    { english: "Friend", german: "Freund" },
+    { english: "Apple", german: "Apfel" },
+    { english: "City", german: "Stadt" },
+    { english: "Family", german: "Familie" },
+    { english: "Restaurant", german: "Restaurant" },
+    { english: "Holiday", german: "Urlaub" },
+    { english: "Music", german: "Musik" },
+    { english: "Window", german: "Fenster" },
+    { english: "Market", german: "Markt" },
+    { english: "Teacher", german: "Lehrer" },
+    { english: "Bicycle", german: "Fahrrad" },
+    { english: "Movie", german: "Film" },
+    { english: "Job", german: "Job" },
+    { english: "Picture", german: "Bild" },
+    { english: "Experience", german: "Erfahrung" },
+    { english: "Environment", german: "Umwelt" },
+    { english: "Development", german: "Entwicklung" },
+    { english: "Responsibility", german: "Verantwortung" },
+    { english: "Culture", german: "Kultur" },
+    { english: "Discussion", german: "Diskussion" },
+    { english: "Solution", german: "Lösung" },
+    { english: "Technology", german: "Technologie" },
+    { english: "Opportunity", german: "Chance" },
+
+{english: "Job", german: "Job"},
+{english: "Colleague", german: "Kollege"},
+{english: "Boss", german: "Chef"},
+{english: "Team", german: "Team"},
+{english: "Workplace", german: "Arbeitsplatz"},
+{english: "Salary", german: "Gehalt"},
+{english: "Career", german: "Karriere"},
+{english: "Meeting", german: "Besprechung"},
+{english: "Appointment", german: "Termin"},
+{english: "Vacation", german: "Urlaub"},
+{english: "Holiday", german: "Feiertag"},
+{english: "Weekend", german: "Wochenende"},
+{english: "Weekday", german: "Wochentag"},
+{english: "Monday", german: "Montag"},
+{english: "Tuesday", german: "Dienstag"},
+{english: "Wednesday", german: "Mittwoch"},
+{english: "Thursday", german: "Donnerstag"},
+{english: "Friday", german: "Freitag"},
+{english: "Saturday", german: "Samstag"},
+{english: "Sunday", german: "Sonntag"},
+{english: "Clock", german: "Uhr"},
+{english: "Minute", german: "Minute"},
+{english: "Hour", german: "Stunde"},
+{english: "Second", german: "Sekunde"},
+{english: "Calendar", german: "Kalender"},
+{english: "Date", german: "Datum"},
+{english: "Time", german: "Zeit"},
+{english: "Past", german: "Vergangenheit"},
+{english: "Present", german: "Gegenwart"},
+{english: "Future", german: "Zukunft"},
+{english: "Always", german: "Immer"},
+{english: "Never", german: "Nie"},
+{english: "Sometimes", german: "Manchmal"},
+{english: "Often", german: "Oft"},
+{english: "Rarely", german: "Selten"},
+{english: "Usually", german: "Gewöhnlich"},
+{english: "Now", german: "Jetzt"},
+{english: "Soon", german: "Bald"},
+{english: "Later", german: "Später"},
+{english: "Before", german: "Vorher"},
+{english: "After", german: "Nachher"},
+{english: "First", german: "Erste"},
+{english: "Last", german: "Letzte"},
+{english: "Next", german: "Nächste"},
+{english: "Early", german: "Früh"},
+{english: "Late", german: "Spät"},
+{english: "Together", german: "Zusammen"},
+{english: "Alone", german: "Allein"},
+{english: "With", german: "Mit"},
+{english: "Without", german: "Ohne"},
+{english: "Because", german: "Weil"},
+{english: "That", german: "Dass"},
+{english: "If", german: "Wenn"},
+{english: "While", german: "Während"},
+{english: "Although", german: "Obwohl"},
+{english: "But", german: "Aber"},
+{english: "Or", german: "Oder"},
+{english: "And", german: "Und"},
+{english: "Also", german: "Auch"},
+{english: "Then", german: "Dann"},
+{english: "So", german: "Also"},
+{english: "Therefore", german: "Deshalb"},
+{english: "However", german: "Jedoch"},
+{english: "Here", german: "Hier"},
+{english: "There", german: "Dort"},
+{english: "Everywhere", german: "Überall"},
+{english: "Nowhere", german: "Nirgendwo"},
+{english: "Inside", german: "Innen"},
+{english: "Outside", german: "Außen"},
+{english: "Above", german: "Oben"},
+{english: "Below", german: "Unten"},
+{english: "Behind", german: "Hinter"},
+{english: "In front of", german: "Vor"},
+{english: "Between", german: "Zwischen"},
+{english: "Near", german: "Nahe"},
+{english: "Far", german: "Fern"},
+{english: "Right", german: "Rechts"},
+{english: "Left", german: "Links"},
+{english: "North", german: "Norden"},
+{english: "South", german: "Süden"},
+{english: "East", german: "Osten"},
+{english: "West", german: "Westen"},
+{english: "Drive", german: "Fahren"},
+{english: "Walk", german: "Gehen"},
+{english: "Run", german: "Rennen"},
+{english: "Swim", german: "Schwimmen"},
+{english: "Fly", german: "Fliegen"},
+{english: "Climb", german: "Klettern"},
+{english: "Jump", german: "Springen"},
+{english: "Sit", german: "Sitzen"},
+{english: "Stand", german: "Stehen"},
+{english: "Lie", german: "Liegen"},
+{english: "Sleep", german: "Schlafen"},
+{english: "Wake up", german: "Aufwachen"},
+{english: "Eat", german: "Essen"},
+{english: "Drink", german: "Trinken"},
+{english: "Cook", german: "Kochen"},
+{english: "Clean", german: "Putzen"},
+{english: "Wash", german: "Waschen"},
+{english: "Read", german: "Lesen"},
+{english: "Write", german: "Schreiben"},
+{english: "Learn", german: "Lernen"},
+{english: "Teach", german: "Lehren"},
+{english: "Understand", german: "Verstehen"},
+{english: "Know", german: "Wissen"},
+{english: "Think", german: "Denken"},
+{english: "Remember", german: "Erinnern"},
+{english: "Forget", german: "Vergessen"},
+{english: "Buy", german: "Kaufen"},
+{english: "Sell", german: "Verkaufen"},
+{english: "Open", german: "Öffnen"},
+{english: "Close", german: "Schließen"},
+{english: "Begin", german: "Beginnen"},
+{english: "End", german: "Beenden"},
+{english: "Start", german: "Starten"},
+{english: "Stop", german: "Anhalten"},
+{english: "Call", german: "Anrufen"},
+{english: "Listen", german: "Zuhören"},
+{english: "Hear", german: "Hören"},
+{english: "Look", german: "Schauen"},
+{english: "See", german: "Sehen"},
+{english: "Watch", german: "Beobachten"},
+{english: "Smile", german: "Lächeln"},
+{english: "Laugh", german: "Lachen"},
+{english: "Cry", german: "Weinen"},
+{english: "Feel", german: "Fühlen"},
+{english: "Love", german: "Lieben"},
+{english: "Hate", german: "Hassen"},
+{english: "Like", german: "Mögen"},
+{english: "Want", german: "Wollen"},
+{english: "Need", german: "Brauchen"},
+{english: "Have", german: "Haben"},
+{english: "Be", german: "Sein"},
+{english: "Can", german: "Können"},
+{english: "Should", german: "Sollten"},
+{english: "Must", german: "Müssen"},
+{english: "May", german: "Dürfen"},
+{english: "Will", german: "Werden"},
+{english: "Would", german: "Würde"},
+{english: "Do", german: "Tun"},
+{english: "Make", german: "Machen"},
+{english: "Try", german: "Versuchen"},
+{english: "Help", german: "Helfen"},
+{english: "Change", german: "Ändern"},
+{english: "Move", german: "Bewegen"},
+{english: "Stay", german: "Bleiben"},
+{english: "Live", german: "Leben"},
+{english: "Die", german: "Sterben"},
+{english: "Travel", german: "Reisen"},
+{english: "Visit", german: "Besuchen"},
+{english: "Meet", german: "Treffen"},
+{english: "Speak", german: "Sprechen"},
+{english: "Say", german: "Sagen"},
+{english: "Ask", german: "Fragen"},
+{english: "Answer", german: "Antworten"},
+{english: "Build", german: "Bauen"},
+{english: "Break", german: "Brechen"},
+{english: "Cut", german: "Schneiden"},
+{english: "Draw", german: "Zeichnen"},
+{english: "Paint", german: "Malen"},
+{english: "Sing", german: "Singen"},
+{english: "Dance", german: "Tanzen"},
+{english: "Play", german: "Spielen"},
+{english: "Win", german: "Gewinnen"},
+{english: "Lose", german: "Verlieren"},
+{english: "Fight", german: "Kämpfen"},
+{english: "Clean", german: "Reinigen"},
+{english: "Repair", german: "Reparieren"},
+{english: "Drive", german: "Fahren"},
+{english: "Park", german: "Parken"},
+{english: "Send", german: "Senden"},
+
+{english: "Animal", german: "Tier"},
+{english: "Bird", german: "Vogel"},
+{english: "Cat", german: "Katze"},
+{english: "Dog", german: "Hund"},
+{english: "Fish", german: "Fisch"},
+{english: "Horse", german: "Pferd"},
+{english: "Mouse", german: "Maus"},
+{english: "Rabbit", german: "Kaninchen"},
+{english: "Snake", german: "Schlange"},
+{english: "Cow", german: "Kuh"},
+{english: "Sheep", german: "Schaf"},
+{english: "Pig", german: "Schwein"},
+{english: "Chicken", german: "Huhn"},
+{english: "Duck", german: "Ente"},
+{english: "Frog", german: "Frosch"},
+{english: "Tiger", german: "Tiger"},
+{english: "Lion", german: "Löwe"},
+{english: "Elephant", german: "Elefant"},
+{english: "Bear", german: "Bär"},
+{english: "Wolf", german: "Wolf"},
+{english: "Jungle", german: "Dschungel"},
+{english: "Forest", german: "Wald"},
+{english: "Tree", german: "Baum"},
+{english: "Flower", german: "Blume"},
+{english: "Grass", german: "Gras"},
+{english: "Leaf", german: "Blatt"},
+{english: "River", german: "Fluss"},
+{english: "Mountain", german: "Berg"},
+{english: "Hill", german: "Hügel"},
+{english: "Valley", german: "Tal"},
+{english: "Ocean", german: "Ozean"},
+{english: "Lake", german: "See"},
+{english: "Sea", german: "Meer"},
+{english: "Island", german: "Insel"},
+{english: "Beach", german: "Strand"},
+{english: "Sand", german: "Sand"},
+{english: "Rock", german: "Fels"},
+{english: "Stone", german: "Stein"},
+{english: "Sky", german: "Himmel"},
+{english: "Cloud", german: "Wolke"},
+{english: "Rain", german: "Regen"},
+{english: "Snow", german: "Schnee"},
+{english: "Wind", german: "Wind"},
+{english: "Storm", german: "Sturm"},
+{english: "Sun", german: "Sonne"},
+{english: "Moon", german: "Mond"},
+{english: "Star", german: "Stern"},
+{english: "Light", german: "Licht"},
+{english: "Dark", german: "Dunkel"},
+{english: "Fire", german: "Feuer"},
+{english: "Water", german: "Wasser"},
+{english: "Earth", german: "Erde"},
+{english: "Air", german: "Luft"},
+{english: "Food", german: "Essen"},
+{english: "Drink", german: "Getränk"},
+{english: "Bread", german: "Brot"},
+{english: "Butter", german: "Butter"},
+{english: "Cheese", german: "Käse"},
+{english: "Milk", german: "Milch"},
+{english: "Egg", german: "Ei"},
+{english: "Meat", german: "Fleisch"},
+{english: "Chicken", german: "Hähnchen"},
+{english: "Fish", german: "Fisch"},
+{english: "Fruit", german: "Obst"},
+{english: "Apple", german: "Apfel"},
+{english: "Banana", german: "Banane"},
+{english: "Orange", german: "Orange"},
+{english: "Grape", german: "Traube"},
+{english: "Vegetable", german: "Gemüse"},
+{english: "Potato", german: "Kartoffel"},
+{english: "Carrot", german: "Karotte"},
+{english: "Tomato", german: "Tomate"},
+{english: "Onion", german: "Zwiebel"},
+{english: "Garlic", german: "Knoblauch"},
+{english: "Salt", german: "Salz"},
+{english: "Pepper", german: "Pfeffer"},
+{english: "Sugar", german: "Zucker"},
+{english: "Honey", german: "Honig"},
+{english: "Coffee", german: "Kaffee"},
+{english: "Tea", german: "Tee"},
+{english: "Juice", german: "Saft"},
+{english: "Beer", german: "Bier"},
+{english: "Wine", german: "Wein"},
+{english: "Restaurant", german: "Restaurant"},
+{english: "Menu", german: "Speisekarte"},
+{english: "Table", german: "Tisch"},
+{english: "Chair", german: "Stuhl"},
+{english: "Knife", german: "Messer"},
+{english: "Fork", german: "Gabel"},
+{english: "Spoon", german: "Löffel"},
+{english: "Plate", german: "Teller"},
+{english: "Cup", german: "Tasse"},
+{english: "Glass", german: "Glas"},
+{english: "Napkin", german: "Serviette"},
+{english: "Kitchen", german: "Küche"},
+{english: "Bathroom", german: "Badezimmer"},
+{english: "Bedroom", german: "Schlafzimmer"},
+{english: "Living room", german: "Wohnzimmer"},
+{english: "Door", german: "Tür"},
+{english: "Window", german: "Fenster"},
+{english: "Floor", german: "Boden"},
+{english: "Ceiling", german: "Decke"},
+{english: "Wall", german: "Wand"},
+{english: "Roof", german: "Dach"},
+{english: "House", german: "Haus"},
+{english: "Apartment", german: "Wohnung"},
+{english: "Building", german: "Gebäude"},
+{english: "Street", german: "Straße"},
+{english: "Road", german: "Weg"},
+{english: "Bridge", german: "Brücke"},
+{english: "City", german: "Stadt"},
+{english: "Town", german: "Ort"},
+{english: "Village", german: "Dorf"},
+{english: "Country", german: "Land"},
+{english: "Capital", german: "Hauptstadt"},
+{english: "Flag", german: "Flagge"},
+{english: "Language", german: "Sprache"},
+{english: "School", german: "Schule"},
+{english: "University", german: "Universität"},
+{english: "Teacher", german: "Lehrer"},
+{english: "Student", german: "Student"},
+{english: "Book", german: "Buch"},
+{english: "Pen", german: "Stift"},
+{english: "Paper", german: "Papier"},
+{english: "Notebook", german: "Heft"},
+{english: "Bag", german: "Tasche"},
+{english: "Computer", german: "Computer"},
+{english: "Phone", german: "Telefon"},
+{english: "Internet", german: "Internet"},
+{english: "Email", german: "E-Mail"},
+{english: "Letter", german: "Brief"},
+{english: "Post", german: "Post"},
+{english: "Bank", german: "Bank"},
+{english: "Money", german: "Geld"},
+{english: "Credit card", german: "Kreditkarte"},
+{english: "Shop", german: "Geschäft"},
+{english: "Market", german: "Markt"},
+{english: "Price", german: "Preis"},
+{english: "Cheap", german: "Billig"},
+{english: "Expensive", german: "Teuer"},
+{english: "Buy", german: "Kaufen"},
+{english: "Sell", german: "Verkaufen"},
+{english: "Open", german: "Öffnen"},
+{english: "Close", german: "Schließen"},
+{english: "Fast", german: "Schnell"},
+{english: "Slow", german: "Langsam"},
+{english: "Big", german: "Groß"},
+{english: "Small", german: "Klein"},
+{english: "Long", german: "Lang"},
+{english: "Short", german: "Kurz"},
+{english: "New", german: "Neu"},
+{english: "Old", german: "Alt"},
+{english: "Young", german: "Jung"},
+{english: "Good", german: "Gut"},
+{english: "Bad", german: "Schlecht"},
+{english: "Happy", german: "Glücklich"},
+{english: "Sad", german: "Traurig"},
+{english: "Easy", german: "Einfach"},
+{english: "Difficult", german: "Schwierig"},
+{english: "Hot", german: "Heiß"},
+{english: "Cold", german: "Kalt"},
+{english: "Clean", german: "Sauber"},
+{english: "Dirty", german: "Schmutzig"},
+{english: "Full", german: "Voll"},
+{english: "Empty", german: "Leer"},
+{english: "Open", german: "Offen"},
+{english: "Closed", german: "Geschlossen"},
+{english: "Strong", german: "Stark"},
+{english: "Weak", german: "Schwach"},
+{english: "Beautiful", german: "Schön"},
+{english: "Ugly", german: "Hässlich"},
+{english: "Rich", german: "Reich"},
+{english: "Poor", german: "Arm"},
+{english: "Clean", german: "Rein"},
+{english: "Dirty", german: "Dreckig"},
+{english: "Quiet", german: "Leise"},
+{english: "Loud", german: "Laut"},
+{english: "Light", german: "Hell"},
+{english: "Dark", german: "Dunkel"},
+{english: "Soft", german: "Weich"},
+{english: "Hard", german: "Hart"},
+{english: "Fast", german: "Schnell"},
+{english: "Slow", german: "Langsam"},
+{english: "Early", german: "Früh"},
+{english: "Late", german: "Spät"},
+{english: "Near", german: "Nahe"},
+{english: "Far", german: "Weit"},
+{english: "Left", german: "Links"},
+{english: "Right", german: "Rechts"},
+{english: "Up", german: "Oben"},
+{english: "Down", german: "Unten"},
+{english: "Inside", german: "Innen"},
+{english: "Outside", german: "Außen"},
+{english: "Here", german: "Hier"},
+{english: "There", german: "Dort"},
+{english: "Everywhere", german: "Überall"},
+{english: "Nowhere", german: "Nirgendwo"},
+{english: "Yesterday", german: "Gestern"},
+{english: "Today", german: "Heute"},
+{english: "Tomorrow", german: "Morgen"},
+{english: "Week", german: "Woche"},
+{english: "Month", german: "Monat"},
+{english: "Year", german: "Jahr"},
+{english: "Time", german: "Zeit"},
+{english: "Hour", german: "Stunde"},
+{english: "Minute", german: "Minute"},
+{english: "Second", german: "Sekunde"},
+{english: "Morning", german: "Morgen"},
+{english: "Afternoon", german: "Nachmittag"},
+{english: "Evening", german: "Abend"},
+{english: "Night", german: "Nacht"},
+{english: "Today", german: "Heute"},
+{english: "Tomorrow", german: "Morgen"},
+{english: "Yesterday", german: "Gestern"},
+{english: "Monday", german: "Montag"},
+{english: "Tuesday", german: "Dienstag"},
+{english: "Wednesday", german: "Mittwoch"},
+{english: "Thursday", german: "Donnerstag"},
+{english: "Friday", german: "Freitag"},
+{english: "Saturday", german: "Samstag"},
+{english: "Sunday", german: "Sonntag"},
+{english: "January", german: "Januar"},
+{english: "February", german: "Februar"},
+{english: "March", german: "März"},
+{english: "April", german: "April"},
+{english: "May", german: "Mai"},
+{english: "June", german: "Juni"},
+{english: "July", german: "Juli"},
+{english: "August", german: "August"},
+{english: "September", german: "September"},
+{english: "October", german: "Oktober"},
+{english: "November", german: "November"},
+
+{english: "Computer", german: "Computer"},
+{english: "Laptop", german: "Laptop"},
+{english: "Tablet", german: "Tablet"},
+{english: "Smartphone", german: "Smartphone"},
+{english: "Screen", german: "Bildschirm"},
+{english: "Keyboard", german: "Tastatur"},
+{english: "Mouse", german: "Maus"},
+{english: "Printer", german: "Drucker"},
+{english: "Camera", german: "Kamera"},
+{english: "Speaker", german: "Lautsprecher"},
+{english: "Headphones", german: "Kopfhörer"},
+{english: "Charger", german: "Ladegerät"},
+{english: "Battery", german: "Batterie"},
+{english: "Internet", german: "Internet"},
+{english: "Website", german: "Webseite"},
+{english: "Email", german: "E-Mail"},
+{english: "Password", german: "Passwort"},
+{english: "Login", german: "Anmeldung"},
+{english: "Logout", german: "Abmeldung"},
+{english: "Download", german: "Herunterladen"},
+{english: "Upload", german: "Hochladen"},
+{english: "File", german: "Datei"},
+{english: "Folder", german: "Ordner"},
+{english: "Document", german: "Dokument"},
+{english: "Software", german: "Software"},
+{english: "Hardware", german: "Hardware"},
+{english: "Program", german: "Programm"},
+{english: "App", german: "App"},
+{english: "Game", german: "Spiel"},
+{english: "Password", german: "Passwort"},
+{english: "User", german: "Benutzer"},
+{english: "Admin", german: "Administrator"},
+{english: "Settings", german: "Einstellungen"},
+{english: "Network", german: "Netzwerk"},
+{english: "Server", german: "Server"},
+{english: "Cloud", german: "Cloud"},
+{english: "Database", german: "Datenbank"},
+{english: "Backup", german: "Backup"},
+{english: "Virus", german: "Virus"},
+{english: "Security", german: "Sicherheit"},
+{english: "Bug", german: "Fehler"},
+{english: "Update", german: "Update"},
+{english: "Install", german: "Installieren"},
+{english: "Uninstall", german: "Deinstallieren"},
+{english: "Folder", german: "Ordner"},
+{english: "Shortcut", german: "Verknüpfung"},
+{english: "Icon", german: "Symbol"},
+{english: "Desktop", german: "Desktop"},
+{english: "Task", german: "Aufgabe"},
+{english: "Project", german: "Projekt"},
+{english: "Team", german: "Team"},
+{english: "Meeting", german: "Besprechung"},
+{english: "Deadline", german: "Abgabefrist"},
+{english: "Report", german: "Bericht"},
+{english: "Presentation", german: "Präsentation"},
+{english: "Email", german: "E-Mail"},
+{english: "Message", german: "Nachricht"},
+{english: "Call", german: "Anruf"},
+{english: "Phone", german: "Telefon"},
+{english: "Contact", german: "Kontakt"},
+{english: "Address", german: "Adresse"},
+{english: "Location", german: "Ort"},
+{english: "Map", german: "Karte"},
+{english: "Travel", german: "Reisen"},
+{english: "Flight", german: "Flug"},
+{english: "Hotel", german: "Hotel"},
+{english: "Reservation", german: "Reservierung"},
+{english: "Ticket", german: "Ticket"},
+{english: "Passport", german: "Pass"},
+{english: "Visa", german: "Visum"},
+{english: "Customs", german: "Zoll"},
+{english: "Airport", german: "Flughafen"},
+{english: "Train", german: "Zug"},
+{english: "Bus", german: "Bus"},
+{english: "Taxi", german: "Taxi"},
+{english: "Car", german: "Auto"},
+{english: "Bike", german: "Fahrrad"},
+{english: "Traffic", german: "Verkehr"},
+{english: "Road", german: "Straße"},
+{english: "Street", german: "Straße"},
+{english: "Highway", german: "Autobahn"},
+{english: "Bridge", german: "Brücke"},
+{english: "Tunnel", german: "Tunnel"},
+{english: "Station", german: "Station"},
+{english: "Stop", german: "Haltestelle"},
+{english: "Ticket", german: "Fahrkarte"},
+{english: "Price", german: "Preis"},
+{english: "Money", german: "Geld"},
+{english: "Cash", german: "Bargeld"},
+{english: "Card", german: "Karte"},
+{english: "Bank", german: "Bank"},
+{english: "Account", german: "Konto"},
+{english: "Loan", german: "Darlehen"},
+{english: "Credit", german: "Kredit"},
+{english: "Debit", german: "Lastschrift"},
+{english: "Deposit", german: "Einzahlung"},
+{english: "Withdraw", german: "Abheben"},
+{english: "Exchange", german: "Wechsel"},
+{english: "Market", german: "Markt"},
+{english: "Store", german: "Geschäft"},
+{english: "Shop", german: "Laden"},
+{english: "Mall", german: "Einkaufszentrum"},
+{english: "Sale", german: "Verkauf"},
+{english: "Discount", german: "Rabatt"},
+{english: "Price", german: "Preis"},
+{english: "Buy", german: "Kaufen"},
+{english: "Sell", german: "Verkaufen"},
+{english: "Open", german: "Öffnen"},
+{english: "Close", german: "Schließen"},
+{english: "Work", german: "Arbeiten"},
+{english: "Job", german: "Job"},
+{english: "Career", german: "Karriere"},
+{english: "Office", german: "Büro"},
+{english: "Boss", german: "Chef"},
+{english: "Employee", german: "Mitarbeiter"},
+{english: "Colleague", german: "Kollege"},
+{english: "Team", german: "Team"},
+{english: "Meeting", german: "Besprechung"},
+{english: "Task", german: "Aufgabe"},
+{english: "Project", german: "Projekt"},
+{english: "Deadline", german: "Abgabefrist"},
+{english: "Salary", german: "Gehalt"},
+{english: "Contract", german: "Vertrag"},
+{english: "Interview", german: "Vorstellungsgespräch"},
+{english: "Resume", german: "Lebenslauf"},
+{english: "Skill", german: "Fähigkeit"},
+{english: "Experience", german: "Erfahrung"},
+{english: "Education", german: "Ausbildung"},
+{english: "Training", german: "Schulung"},
+{english: "Promotion", german: "Beförderung"},
+{english: "Quit", german: "Kündigen"},
+{english: "Retire", german: "In den Ruhestand gehen"},
+{english: "Holiday", german: "Urlaub"},
+{english: "Sick leave", german: "Krankheitstag"},
+{english: "Part-time", german: "Teilzeit"},
+{english: "Full-time", german: "Vollzeit"},
+{english: "Overtime", german: "Überstunden"},
+{english: "Bonus", german: "Bonus"},
+{english: "Benefit", german: "Leistung"},
+{english: "Insurance", german: "Versicherung"},
+{english: "Tax", german: "Steuer"},
+{english: "Pension", german: "Rente"},
+{english: "Unemployment", german: "Arbeitslosigkeit"},
+{english: "Economy", german: "Wirtschaft"},
+{english: "Industry", german: "Industrie"},
+{english: "Company", german: "Firma"},
+{english: "Business", german: "Geschäft"},
+{english: "Trade", german: "Handel"},
+{english: "Profit", german: "Gewinn"},
+{english: "Loss", german: "Verlust"},
+{english: "Investment", german: "Investition"},
+{english: "Stock", german: "Aktie"},
+{english: "Share", german: "Anteil"},
+{english: "Market", german: "Markt"},
+{english: "Price", german: "Preis"},
+{english: "Demand", german: "Nachfrage"},
+{english: "Supply", german: "Angebot"},
+{english: "Competition", german: "Wettbewerb"},
+{english: "Customer", german: "Kunde"},
+{english: "Client", german: "Klient"},
+{english: "Service", german: "Dienstleistung"},
+{english: "Product", german: "Produkt"},
+{english: "Quality", german: "Qualität"},
+{english: "Brand", german: "Marke"},
+{english: "Advertisement", german: "Werbung"},
+{english: "Price", german: "Preis"},
+{english: "Sale", german: "Verkauf"},
+{english: "Store", german: "Geschäft"},
+{english: "Shop", german: "Laden"},
+{english: "Customer", german: "Kunde"},
+{english: "Buyer", german: "Käufer"},
+{english: "Seller", german: "Verkäufer"},
+{english: "Money", german: "Geld"},
+{english: "Cash", german: "Bargeld"},
+{english: "Credit card", german: "Kreditkarte"},
+{english: "Check", german: "Scheck"},
+{english: "Price", german: "Preis"},
+{english: "Bill", german: "Rechnung"},
+{english: "Receipt", german: "Quittung"},
+{english: "Change", german: "Wechselgeld"},
+{english: "Tax", german: "Steuer"},
+{english: "Tip", german: "Trinkgeld"},
+{english: "Currency", german: "Währung"},
+{english: "Bank", german: "Bank"},
+{english: "Account", german: "Konto"},
+{english: "Loan", german: "Darlehen"},
+{english: "Interest", german: "Zinsen"},
+{english: "Mortgage", german: "Hypothek"},
+{english: "Deposit", german: "Einzahlung"},
+{english: "Withdraw", german: "Abheben"},
+{english: "Balance", german: "Kontostand"},
+{english: "Budget", german: "Budget"},
+{english: "Economy", german: "Wirtschaft"},
+{english: "Finance", german: "Finanzen"},
+{english: "Investment", german: "Investition"},
+{english: "Stock market", german: "Aktienmarkt"},
+{english: "Currency", german: "Währung"},
+{english: "Trade", german: "Handel"},
+{english: "Business", german: "Geschäft"},
+{english: "Company", german: "Firma"},
+{english: "Industry", german: "Industrie"},
+{english: "Market", german: "Markt"},
+{english: "Profit", german: "Gewinn"},
+{english: "Loss", german: "Verlust"},
+{english: "Customer", german: "Kunde"},
+{english: "Service", german: "Dienstleistung"},
+{english: "Product", german: "Produkt"},
+{english: "Quality", german: "Qualität"},
+{english: "Brand", german: "Marke"},
+{english: "Advertisement", german: "Werbung"},
+{english: "Price", german: "Preis"},
+{english: "Sale", german: "Verkauf"},
+{english: "Shop", german: "Laden"},
+{english: "Store", german: "Geschäft"},
+{english: "Buyer", german: "Käufer"},
+{english: "Seller", german: "Verkäufer"},
+{english: "Money", german: "Geld"},
+{english: "Cash", german: "Bargeld"},
+{english: "Credit card", german: "Kreditkarte"},
+{english: "Check", german: "Scheck"},
+{english: "Bill", german: "Rechnung"},
+{english: "Receipt", german: "Quittung"},
+{english: "Change", german: "Wechselgeld"},
+{english: "Tax", german: "Steuer"},
+
+{english: "Airport", german: "Flughafen"},
+{english: "Arrival", german: "Ankunft"},
+{english: "Departure", german: "Abflug"},
+{english: "Baggage", german: "Gepäck"},
+{english: "Check-in", german: "Einchecken"},
+{english: "Gate", german: "Tor"},
+{english: "Flight", german: "Flug"},
+{english: "Pilot", german: "Pilot"},
+{english: "Crew", german: "Besatzung"},
+{english: "Passenger", german: "Passagier"},
+{english: "Ticket", german: "Ticket"},
+{english: "Passport", german: "Reisepass"},
+{english: "Customs", german: "Zoll"},
+{english: "Security", german: "Sicherheit"},
+{english: "Luggage", german: "Gepäck"},
+{english: "Suitcase", german: "Koffer"},
+{english: "Backpack", german: "Rucksack"},
+{english: "Delay", german: "Verspätung"},
+{english: "Cancellation", german: "Stornierung"},
+{english: "Boarding", german: "Boarding"},
+{english: "Arrival hall", german: "Ankunftshalle"},
+{english: "Departure hall", german: "Abflughalle"},
+{english: "Taxiway", german: "Rollbahn"},
+{english: "Runway", german: "Start- und Landebahn"},
+{english: "Control tower", german: "Kontrollturm"},
+{english: "Airline", german: "Fluggesellschaft"},
+{english: "Economy class", german: "Economy-Klasse"},
+{english: "Business class", german: "Business-Klasse"},
+{english: "First class", german: "Erste Klasse"},
+{english: "Reservation", german: "Reservierung"},
+{english: "Booking", german: "Buchung"},
+{english: "Confirmation", german: "Bestätigung"},
+{english: "Travel insurance", german: "Reiseversicherung"},
+{english: "Visa", german: "Visum"},
+{english: "Tourist", german: "Tourist"},
+{english: "Guide", german: "Führer"},
+{english: "Map", german: "Karte"},
+{english: "Hotel", german: "Hotel"},
+{english: "Hostel", german: "Hostel"},
+{english: "Reservation", german: "Reservierung"},
+{english: "Reception", german: "Rezeption"},
+{english: "Room", german: "Zimmer"},
+{english: "Key", german: "Schlüssel"},
+{english: "Check-out", german: "Check-out"},
+{english: "Breakfast", german: "Frühstück"},
+{english: "Lunch", german: "Mittagessen"},
+{english: "Dinner", german: "Abendessen"},
+{english: "Restaurant", german: "Restaurant"},
+{english: "Menu", german: "Speisekarte"},
+{english: "Waiter", german: "Kellner"},
+{english: "Bill", german: "Rechnung"},
+{english: "Tip", german: "Trinkgeld"},
+{english: "Reservation", german: "Reservierung"},
+{english: "Beach", german: "Strand"},
+{english: "Sun", german: "Sonne"},
+{english: "Sand", german: "Sand"},
+{english: "Sea", german: "Meer"},
+{english: "Wave", german: "Welle"},
+{english: "Boat", german: "Boot"},
+{english: "Swimming", german: "Schwimmen"},
+{english: "Fishing", german: "Angeln"},
+{english: "Diving", german: "Tauchen"},
+{english: "Surfing", german: "Surfen"},
+{english: "Mountain", german: "Berg"},
+{english: "Hiking", german: "Wandern"},
+{english: "Camping", german: "Camping"},
+{english: "Forest", german: "Wald"},
+{english: "River", german: "Fluss"},
+{english: "Lake", german: "See"},
+{english: "Trail", german: "Pfad"},
+{english: "Park", german: "Park"},
+{english: "Zoo", german: "Zoo"},
+{english: "Museum", german: "Museum"},
+{english: "Theater", german: "Theater"},
+{english: "Cinema", german: "Kino"},
+{english: "Concert", german: "Konzert"},
+{english: "Festival", german: "Festival"},
+{english: "Art", german: "Kunst"},
+{english: "Music", german: "Musik"},
+{english: "Dance", german: "Tanz"},
+{english: "Book", german: "Buch"},
+{english: "Library", german: "Bibliothek"},
+{english: "School", german: "Schule"},
+{english: "University", german: "Universität"},
+{english: "Teacher", german: "Lehrer"},
+{english: "Student", german: "Student"},
+{english: "Exam", german: "Prüfung"},
+{english: "Homework", german: "Hausaufgabe"},
+{english: "Lesson", german: "Unterricht"},
+{english: "Classroom", german: "Klassenzimmer"},
+{english: "Desk", german: "Schreibtisch"},
+{english: "Chair", german: "Stuhl"},
+{english: "Pen", german: "Stift"},
+{english: "Pencil", german: "Bleistift"},
+{english: "Eraser", german: "Radiergummi"},
+{english: "Notebook", german: "Heft"},
+{english: "Paper", german: "Papier"},
+{english: "Calculator", german: "Taschenrechner"},
+{english: "Computer", german: "Computer"},
+{english: "Phone", german: "Telefon"},
+{english: "Internet", german: "Internet"},
+{english: "Email", german: "E-Mail"},
+{english: "Letter", german: "Brief"},
+{english: "Post", german: "Post"},
+{english: "Package", german: "Paket"},
+{english: "Mailman", german: "Briefträger"},
+{english: "Bank", german: "Bank"},
+{english: "Money", german: "Geld"},
+{english: "Account", german: "Konto"},
+{english: "Loan", german: "Darlehen"},
+{english: "Credit", german: "Kredit"},
+{english: "Debit", german: "Lastschrift"},
+{english: "Deposit", german: "Einzahlung"},
+{english: "Withdraw", german: "Abheben"},
+{english: "Exchange", german: "Wechsel"},
+{english: "Market", german: "Markt"},
+{english: "Shop", german: "Geschäft"},
+{english: "Price", german: "Preis"},
+{english: "Cheap", german: "Billig"},
+{english: "Expensive", german: "Teuer"},
+{english: "Buy", german: "Kaufen"},
+{english: "Sell", german: "Verkaufen"},
+{english: "Open", german: "Öffnen"},
+{english: "Close", german: "Schließen"},
+{english: "Work", german: "Arbeiten"},
+{english: "Job", german: "Job"},
+{english: "Office", german: "Büro"},
+{english: "Boss", german: "Chef"},
+{english: "Employee", german: "Mitarbeiter"},
+{english: "Colleague", german: "Kollege"},
+{english: "Meeting", german: "Besprechung"},
+{english: "Task", german: "Aufgabe"},
+{english: "Project", german: "Projekt"},
+{english: "Deadline", german: "Abgabefrist"},
+{english: "Salary", german: "Gehalt"},
+{english: "Contract", german: "Vertrag"},
+{english: "Interview", german: "Vorstellungsgespräch"},
+{english: "Resume", german: "Lebenslauf"},
+{english: "Skill", german: "Fähigkeit"},
+{english: "Experience", german: "Erfahrung"},
+{english: "Education", german: "Ausbildung"},
+{english: "Training", german: "Schulung"},
+{english: "Promotion", german: "Beförderung"},
+{english: "Quit", german: "Kündigen"},
+{english: "Retire", german: "In den Ruhestand gehen"},
+{english: "Holiday", german: "Urlaub"},
+{english: "Sick leave", german: "Krankheitstag"},
+{english: "Part-time", german: "Teilzeit"},
+{english: "Full-time", german: "Vollzeit"},
+{english: "Overtime", german: "Überstunden"},
+{english: "Bonus", german: "Bonus"},
+{english: "Benefit", german: "Leistung"},
+{english: "Insurance", german: "Versicherung"},
+{english: "Tax", german: "Steuer"},
+{english: "Pension", german: "Rente"},
+{english: "Unemployment", german: "Arbeitslosigkeit"},
+{english: "Economy", german: "Wirtschaft"},
+{english: "Industry", german: "Industrie"},
+{english: "Company", german: "Firma"},
+{english: "Business", german: "Geschäft"},
+{english: "Trade", german: "Handel"},
+{english: "Profit", german: "Gewinn"},
+{english: "Loss", german: "Verlust"},
+{english: "Investment", german: "Investition"},
+{english: "Stock", german: "Aktie"},
+{english: "Share", german: "Anteil"},
+{english: "Market", german: "Markt"},
+{english: "Price", german: "Preis"},
+{english: "Demand", german: "Nachfrage"},
+{english: "Supply", german: "Angebot"},
+{english: "Competition", german: "Wettbewerb"},
+{english: "Customer", german: "Kunde"},
+{english: "Client", german: "Klient"},
+{english: "Service", german: "Dienstleistung"},
+{english: "Product", german: "Produkt"},
+{english: "Quality", german: "Qualität"},
+{english: "Brand", german: "Marke"},
+{english: "Advertisement", german: "Werbung"},
+{english: "Sale", german: "Verkauf"},
+{english: "Store", german: "Geschäft"},
+{english: "Shop", german: "Laden"},
+{english: "Buyer", german: "Käufer"},
+{english: "Seller", german: "Verkäufer"},
+{english: "Money", german: "Geld"},
+{english: "Cash", german: "Bargeld"},
+{english: "Credit card", german: "Kreditkarte"},
+{english: "Check", german: "Scheck"},
+{english: "Bill", german: "Rechnung"},
+{english: "Receipt", german: "Quittung"},
+{english: "Change", german: "Wechselgeld"},
+{english: "Tip", german: "Trinkgeld"},
+
+{english: "Animal", german: "Tier"},
+{english: "Dog", german: "Hund"},
+{english: "Cat", german: "Katze"},
+{english: "Bird", german: "Vogel"},
+{english: "Fish", german: "Fisch"},
+{english: "Horse", german: "Pferd"},
+{english: "Cow", german: "Kuh"},
+{english: "Pig", german: "Schwein"},
+{english: "Sheep", german: "Schaf"},
+{english: "Goat", german: "Ziege"},
+{english: "Rabbit", german: "Kaninchen"},
+{english: "Mouse", german: "Maus"},
+{english: "Rat", german: "Ratte"},
+{english: "Lion", german: "Löwe"},
+{english: "Tiger", german: "Tiger"},
+{english: "Elephant", german: "Elefant"},
+{english: "Bear", german: "Bär"},
+{english: "Wolf", german: "Wolf"},
+{english: "Fox", german: "Fuchs"},
+{english: "Monkey", german: "Affe"},
+{english: "Snake", german: "Schlange"},
+{english: "Frog", german: "Frosch"},
+{english: "Turtle", german: "Schildkröte"},
+{english: "Butterfly", german: "Schmetterling"},
+{english: "Bee", german: "Biene"},
+{english: "Ant", german: "Ameise"},
+{english: "Spider", german: "Spinne"},
+{english: "Insect", german: "Insekt"},
+{english: "Animal", german: "Tier"},
+{english: "Pet", german: "Haustier"},
+{english: "Zoo", german: "Zoo"},
+{english: "Farm", german: "Bauernhof"},
+{english: "Wildlife", german: "Tierwelt"},
+{english: "Nature", german: "Natur"},
+{english: "Forest", german: "Wald"},
+{english: "Mountain", german: "Berg"},
+{english: "River", german: "Fluss"},
+{english: "Lake", german: "See"},
+{english: "Sea", german: "Meer"},
+{english: "Ocean", german: "Ozean"},
+{english: "Beach", german: "Strand"},
+{english: "Sun", german: "Sonne"},
+{english: "Rain", german: "Regen"},
+{english: "Snow", german: "Schnee"},
+{english: "Wind", german: "Wind"},
+{english: "Storm", german: "Sturm"},
+{english: "Cloud", german: "Wolke"},
+{english: "Sky", german: "Himmel"},
+{english: "Star", german: "Stern"},
+{english: "Moon", german: "Mond"},
+{english: "Day", german: "Tag"},
+{english: "Night", german: "Nacht"},
+{english: "Morning", german: "Morgen"},
+{english: "Evening", german: "Abend"},
+{english: "Afternoon", german: "Nachmittag"},
+{english: "Season", german: "Jahreszeit"},
+{english: "Spring", german: "Frühling"},
+{english: "Summer", german: "Sommer"},
+{english: "Autumn", german: "Herbst"},
+{english: "Winter", german: "Winter"},
+{english: "Weather", german: "Wetter"},
+{english: "Cold", german: "Kalt"},
+{english: "Hot", german: "Heiß"},
+{english: "Warm", german: "Warm"},
+{english: "Cool", german: "Kühl"},
+{english: "Temperature", german: "Temperatur"},
+{english: "Clothes", german: "Kleidung"},
+{english: "Shirt", german: "Hemd"},
+{english: "Trousers", german: "Hose"},
+{english: "Dress", german: "Kleid"},
+{english: "Skirt", german: "Rock"},
+{english: "Coat", german: "Mantel"},
+{english: "Jacket", german: "Jacke"},
+{english: "Sweater", german: "Pullover"},
+{english: "Shoes", german: "Schuhe"},
+{english: "Socks", german: "Socken"},
+{english: "Hat", german: "Hut"},
+{english: "Gloves", german: "Handschuhe"},
+{english: "Scarf", german: "Schal"},
+{english: "Bag", german: "Tasche"},
+{english: "Watch", german: "Uhr"},
+{english: "Jewelry", german: "Schmuck"},
+{english: "Ring", german: "Ring"},
+{english: "Necklace", german: "Halskette"},
+{english: "Earrings", german: "Ohrringe"},
+{english: "Bracelet", german: "Armband"},
+{english: "Glasses", german: "Brille"},
+{english: "Sunglasses", german: "Sonnenbrille"},
+{english: "Umbrella", german: "Regenschirm"},
+{english: "House", german: "Haus"},
+{english: "Apartment", german: "Wohnung"},
+{english: "Room", german: "Zimmer"},
+{english: "Kitchen", german: "Küche"},
+{english: "Bathroom", german: "Badezimmer"},
+{english: "Bedroom", german: "Schlafzimmer"},
+{english: "Living room", german: "Wohnzimmer"},
+{english: "Garden", german: "Garten"},
+{english: "Door", german: "Tür"},
+{english: "Window", german: "Fenster"},
+{english: "Floor", german: "Boden"},
+{english: "Ceiling", german: "Decke"},
+{english: "Wall", german: "Wand"},
+{english: "Roof", german: "Dach"},
+{english: "Furniture", german: "Möbel"},
+{english: "Table", german: "Tisch"},
+{english: "Chair", german: "Stuhl"},
+{english: "Bed", german: "Bett"},
+{english: "Sofa", german: "Sofa"},
+{english: "Desk", german: "Schreibtisch"},
+{english: "Lamp", german: "Lampe"},
+{english: "Shelf", german: "Regal"},
+{english: "Cupboard", german: "Schrank"},
+{english: "Fridge", german: "Kühlschrank"},
+{english: "Oven", german: "Ofen"},
+{english: "Microwave", german: "Mikrowelle"},
+{english: "Sink", german: "Spüle"},
+{english: "Toilet", german: "Toilette"},
+{english: "Shower", german: "Dusche"},
+{english: "Bathtub", german: "Badewanne"},
+{english: "Mirror", german: "Spiegel"},
+{english: "Car", german: "Auto"},
+{english: "Bike", german: "Fahrrad"},
+{english: "Bus", german: "Bus"},
+{english: "Train", german: "Zug"},
+{english: "Plane", german: "Flugzeug"},
+{english: "Boat", german: "Boot"},
+{english: "Taxi", german: "Taxi"},
+{english: "Road", german: "Straße"},
+{english: "Street", german: "Straße"},
+{english: "Bridge", german: "Brücke"},
+{english: "Traffic", german: "Verkehr"},
+{english: "Signal", german: "Signal"},
+{english: "Light", german: "Licht"},
+{english: "Stop", german: "Stopp"},
+{english: "Go", german: "Los"},
+{english: "Walk", german: "Gehen"},
+{english: "Run", german: "Laufen"},
+{english: "Jump", german: "Springen"},
+{english: "Swim", german: "Schwimmen"},
+{english: "Fly", german: "Fliegen"},
+{english: "Drive", german: "Fahren"},
+{english: "Ride", german: "Reiten"},
+{english: "Eat", german: "Essen"},
+{english: "Drink", german: "Trinken"},
+{english: "Cook", german: "Kochen"},
+{english: "Bake", german: "Backen"},
+{english: "Clean", german: "Saubermachen"},
+{english: "Wash", german: "Waschen"},
+{english: "Sleep", german: "Schlafen"},
+{english: "Wake up", german: "Aufwachen"},
+{english: "Get up", german: "Aufstehen"},
+{english: "Sit", german: "Sitzen"},
+{english: "Stand", german: "Stehen"},
+{english: "Talk", german: "Sprechen"},
+{english: "Listen", german: "Zuhören"},
+{english: "Read", german: "Lesen"},
+{english: "Write", german: "Schreiben"},
+{english: "Learn", german: "Lernen"},
+{english: "Teach", german: "Lehren"},
+{english: "Play", german: "Spielen"},
+{english: "Work", german: "Arbeiten"},
+{english: "Study", german: "Studieren"},
+{english: "Travel", german: "Reisen"},
+{english: "Love", german: "Lieben"},
+{english: "Like", german: "Mögen"},
+{english: "Hate", german: "Hassen"},
+{english: "Help", german: "Helfen"},
+{english: "Open", german: "Öffnen"},
+{english: "Close", german: "Schließen"},
+{english: "Start", german: "Starten"},
+{english: "Finish", german: "Beenden"},
+{english: "Stop", german: "Stoppen"},
+{english: "Wait", german: "Warten"},
+{english: "Go", german: "Gehen"},
+{english: "Come", german: "Kommen"},
+{english: "Bring", german: "Bringen"},
+{english: "Take", german: "Nehmen"},
+{english: "Give", german: "Geben"},
+{english: "Buy", german: "Kaufen"},
+{english: "Sell", german: "Verkaufen"},
+{english: "Find", german: "Finden"},
+{english: "Lose", german: "Verlieren"},
+{english: "Call", german: "Anrufen"},
+{english: "Meet", german: "Treffen"},
+{english: "Ask", german: "Fragen"},
+{english: "Answer", german: "Antworten"},
+{english: "Remember", german: "Erinnern"},
+{english: "Forget", german: "Vergessen"},
+{english: "Think", german: "Denken"},
+{english: "Know", german: "Wissen"},
+{english: "Understand", german: "Verstehen"},
+{english: "Believe", german: "Glauben"},
+{english: "Hope", german: "Hoffen"},
+{english: "Want", german: "Wollen"},
+{english: "Need", german: "Brauchen"},
+{english: "Feel", german: "Fühlen"},
+{english: "See", german: "Sehen"},
+{english: "Hear", german: "Hören"},
+{english: "Smell", german: "Riechen"},
+{english: "Taste", german: "Schmecken"},
+{english: "Touch", german: "Berühren"},
+{english: "Walk", german: "Gehen"},
+{english: "Run", german: "Laufen"},
+{english: "Jump", german: "Springen"},
+{english: "Swim", german: "Schwimmen"},
+{english: "Fly", german: "Fliegen"},
+{english: "Drive", german: "Fahren"},
+{english: "Ride", german: "Reiten"},
+{english: "Sing", german: "Singen"},
+{english: "Dance", german: "Tanzen"},
+{english: "Laugh", german: "Lachen"},
+{english: "Cry", german: "Weinen"},
+{english: "Smile", german: "Lächeln"},
+{english: "Help", german: "Helfen"},
+{english: "Love", german: "Lieben"},
+{english: "Hate", german: "Hassen"},
+{english: "Like", german: "Mögen"},
+{english: "Want", german: "Wollen"},
+{english: "Need", german: "Brauchen"},
+{english: "Think", german: "Denken"},
+{english: "Know", german: "Wissen"},
+{english: "Understand", german: "Verstehen"},
+{english: "Remember", german: "Erinnern"},
+{english: "Forget", german: "Vergessen"},
+{english: "Believe", german: "Glauben"},
+{english: "Hope", german: "Hoffen"},
+{english: "Work", german: "Arbeiten"},
+{english: "Play", german: "Spielen"},
+{english: "Study", german: "Studieren"},
+{english: "Travel", german: "Reisen"},
+{english: "Eat", german: "Essen"},
+{english: "Drink", german: "Trinken"}
+
+  ];
+
+  let currentIndex = 0;
+
+  const englishWordEl = document.getElementById('english-word');
+  const optionsContainer = document.getElementById('options-container');
+  const emojiEl = document.getElementById('emoji');
+  const screen = document.getElementById('screen');
+  const wordCountEl = document.getElementById('word-count');
+
+  const correctSound = document.getElementById('correct-sound');
+  const wrongSound = document.getElementById('wrong-sound');
+
+  function shuffleArray(arr) {
+    for(let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  function flashBackground(colorClass) {
+    screen.classList.add(colorClass === 'correct' ? 'correct-flash' : 'wrong-flash');
+    setTimeout(() => {
+      screen.classList.remove('correct-flash');
+      screen.classList.remove('wrong-flash');
+    }, 600);
+  }
+
+  function updateWordCount() {
+    wordCountEl.textContent = `Total Words: ${words.length}`;
+  }
+
+  function showQuestion() {
+    emojiEl.textContent = '';
+    optionsContainer.innerHTML = '';
+
+    if(currentIndex >= words.length) {
+      alert(`Challenge Complete! Well done.`);
+      currentIndex = 0;
+    }
+
+    const word = words[currentIndex];
+    englishWordEl.textContent = word.english;
+
+    let options = [word.german];
+
+    while (options.length < 3) {
+      let idx = Math.floor(Math.random() * words.length);
+      let candidate = words[idx].german;
+      if (!options.includes(candidate)) {
+        options.push(candidate);
+      }
+    }
+
+    shuffleArray(options);
+
+    options.forEach(opt => {
+      const btn = document.createElement('div');
+      btn.textContent = opt;
+      btn.classList.add('option');
+      btn.addEventListener('click', () => handleAnswer(btn, word.german));
+      optionsContainer.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(selectedBtn, correctAnswer) {
+    const allOptions = document.querySelectorAll('.option');
+    allOptions.forEach(btn => btn.classList.add('disabled'));
+
+    if (selectedBtn.textContent === correctAnswer) {
+      selectedBtn.classList.add('correct');
+      emojiEl.textContent = "✅✨";
+      flashBackground('correct');
+      correctSound.play();
+    } else {
+      selectedBtn.classList.add('wrong');
+      emojiEl.textContent = "❌";
+      flashBackground('wrong');
+      wrongSound.play();
+      allOptions.forEach(btn => {
+        if (btn.textContent === correctAnswer) btn.classList.add('correct');
+      });
+    }
+
+    setTimeout(() => {
+      currentIndex++;
+      showQuestion();
+    }, 1200);
+  }
+
+  updateWordCount();
+  showQuestion();
+</script>
+
+</body>
+</html>
